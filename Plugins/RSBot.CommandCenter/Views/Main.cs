@@ -63,8 +63,8 @@ public partial class Main : DoubleBufferedControl
     {
         if (
             MessageBox.Show(
-                @"Do you really want to reset all settings to default?",
-                @"Reset",
+                LanguageManager.GetLangOrDefault("ResetSettingsConfirm", "Do you really want to reset all settings to default?"),
+                LanguageManager.GetLangOrDefault("ResetTitle", "Reset"),
                 MessageBoxButtons.OKCancel,
                 MessageBoxIcon.Warning
             ) != DialogResult.OK

@@ -651,7 +651,7 @@ public partial class Main : DoubleBufferedControl
     private void btnAddToAutoParty_Click(object sender, EventArgs e)
     {
         var dialog = new InputDialog(
-            "Input",
+            LanguageManager.GetLangOrDefault("InputDialogTitle", "Input"),
             LanguageManager.GetLang("CharName"),
             LanguageManager.GetLang("EnterCharNameForPartyList")
         );
@@ -1030,7 +1030,12 @@ public partial class Main : DoubleBufferedControl
         }
 
         if (
-            MessageBox.Show(this, LanguageManager.GetLang("GroupDeleteWarn", count), "Warning", MessageBoxButtons.YesNo)
+            MessageBox.Show(
+                this,
+                LanguageManager.GetLang("GroupDeleteWarn", count),
+                LanguageManager.GetLangOrDefault("MsgBoxWarningTitle", "Warning"),
+                MessageBoxButtons.YesNo
+            )
             == DialogResult.Yes
         )
         {
@@ -1053,7 +1058,12 @@ public partial class Main : DoubleBufferedControl
             return;
 
         if (
-            MessageBox.Show(this, LanguageManager.GetLang("GroupCharDeleteWarn"), "Warning", MessageBoxButtons.YesNo)
+            MessageBox.Show(
+                this,
+                LanguageManager.GetLang("GroupCharDeleteWarn"),
+                LanguageManager.GetLangOrDefault("MsgBoxWarningTitle", "Warning"),
+                MessageBoxButtons.YesNo
+            )
             == DialogResult.Yes
         )
         {
@@ -1074,7 +1084,7 @@ public partial class Main : DoubleBufferedControl
     private void buttonAddCharToBuffing_Click(object sender, EventArgs e)
     {
         var diag = new InputDialog(
-            "Input",
+            LanguageManager.GetLangOrDefault("InputDialogTitle", "Input"),
             LanguageManager.GetLang("CharName"),
             LanguageManager.GetLang("EnterCharNameForBuffing")
         );
@@ -1099,7 +1109,7 @@ public partial class Main : DoubleBufferedControl
     private void buttonCommandPlayerAdd_Click(object sender, EventArgs e)
     {
         var diag = new InputDialog(
-            "Input",
+            LanguageManager.GetLangOrDefault("InputDialogTitle", "Input"),
             LanguageManager.GetLang("CharName"),
             LanguageManager.GetLang("EnterCharNameForCommandList")
         );

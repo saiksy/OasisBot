@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using RSBot.Core;
+using RSBot.Core.Components;
 using RSBot.Core.Event;
 using RSBot.Core.Objects.Quests;
 using RSBot.Quest.Views.Sidebar;
@@ -229,8 +230,11 @@ public partial class Main : DoubleBufferedControl
 
         if (
             MessageBox.Show(
-                $"Do you really want to abandon the quest [{activeQuest.Quest.GetTranslatedName()}]?",
-                "Abandon quest",
+                string.Format(
+                    LanguageManager.GetLangOrDefault("AbandonQuestConfirm", "Do you really want to abandon the quest [{0}]?"),
+                    activeQuest.Quest.GetTranslatedName()
+                ),
+                LanguageManager.GetLangOrDefault("AbandonQuestTitle", "Abandon quest"),
                 MessageBoxButtons.YesNo
             ) == DialogResult.Yes
         )

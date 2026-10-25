@@ -481,7 +481,7 @@ public partial class Main : DoubleBufferedControl
         if (items.Count == 0)
         {
             listFilter.Visible = true;
-            MessageBox.Show(this, LanguageManager.GetLang("NoResultsFound"), "Warning");
+            MessageBox.Show(this, LanguageManager.GetLang("NoResultsFound"), LanguageManager.GetLangOrDefault("MsgBoxWarningTitle", "Warning"));
             return;
         }
 

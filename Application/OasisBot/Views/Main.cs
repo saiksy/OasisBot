@@ -768,8 +768,8 @@ public partial class Main : UIWindow
         }
 
         MessageBox.Show(
-            "Unfortunately, it does not support this mode because your operating system is outdated!",
-            "Warning",
+            LanguageManager.GetLangOrDefault("OutdatedOsWarning", "Unfortunately, it does not support this mode because your operating system is outdated!"),
+            LanguageManager.GetLangOrDefault("MsgBoxWarningTitle", "Warning"),
             MessageBoxButtons.OK,
             MessageBoxIcon.Warning
         );
@@ -815,8 +815,8 @@ public partial class Main : UIWindow
         if (oldSroPath != tempNewConfig.Get("RSBot.SilkroadDirectory", ""))
             if (
                 MessageBox.Show(
-                    "This profile references to a different client, do you want to restart the bot?",
-                    "Restart bot?",
+                    LanguageManager.GetLangOrDefault("DifferentClientRestart", "This profile references to a different client, do you want to restart the bot?"),
+                    LanguageManager.GetLangOrDefault("DifferentClientRestartTitle", "Restart bot?"),
                     MessageBoxButtons.OKCancel,
                     MessageBoxIcon.Warning
                 ) == DialogResult.OK
@@ -847,12 +847,14 @@ public partial class Main : UIWindow
     /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
     private void buttonConfig_Click(object sender, EventArgs e)
     {
-        const string title = "IP Bind";
+        var title = LanguageManager.GetLangOrDefault("IpBindDialogTitle", "IP Bind");
 
         var currentBind = GlobalConfig.Get("RSBot.Network.BindIp", "0.0.0.0");
 
-        const string message =
-            "Use your custom interface ip for connect to game.\nEnter your interface Ip:\t(default: 0.0.0.0)";
+        var message = LanguageManager.GetLangOrDefault(
+            "IpBindDialogContent",
+            "Use your custom interface ip for connect to game.\nEnter your interface Ip:\t(default: 0.0.0.0)"
+        );
 
         var dialog = new InputDialog(title, title, message, defaultValue: currentBind);
         if (dialog.ShowDialog() != DialogResult.OK)
@@ -860,7 +862,10 @@ public partial class Main : UIWindow
 
         if (!IPAddress.TryParse(dialog.Value.ToString(), out var ipAddress))
         {
-            const string errorMessage = "The IP address is incorrect or cannot be verified.You can try like '0.0.0.0'.";
+            var errorMessage = LanguageManager.GetLangOrDefault(
+                "IpBindInvalid",
+                "The IP address is incorrect or cannot be verified.You can try like '0.0.0.0'."
+            );
             MessageBox.Show(errorMessage);
 
             return;

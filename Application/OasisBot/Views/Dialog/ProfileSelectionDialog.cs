@@ -43,7 +43,12 @@ public partial class ProfileSelectionDialog : UIWindowBase
 
     private string CreateNewProfile()
     {
-        var inputDialog = new InputDialog("New profile", "New profile", "Please enter a profile name");
+        var newProfileTitle = LanguageManager.GetLangOrDefault("NewProfileTitle", "New profile");
+        var inputDialog = new InputDialog(
+            newProfileTitle,
+            newProfileTitle,
+            LanguageManager.GetLangOrDefault("NewProfileContent", "Please enter a profile name")
+        );
         if (inputDialog.ShowDialog() != DialogResult.OK)
             return string.Empty;
 
@@ -52,8 +57,8 @@ public partial class ProfileSelectionDialog : UIWindowBase
         if (profile.LastIndexOfAny(Path.GetInvalidFileNameChars(), 0) != -1)
         {
             MessageBox.Show(
-                "The profile name contains invalid characters!",
-                "Invalid name",
+                LanguageManager.GetLangOrDefault("ProfileNameInvalidChars", "The profile name contains invalid characters!"),
+                LanguageManager.GetLangOrDefault("ProfileInvalidNameTitle", "Invalid name"),
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error
             );
@@ -64,8 +69,11 @@ public partial class ProfileSelectionDialog : UIWindowBase
         if (ProfileManager.ProfileExists(profile))
         {
             MessageBox.Show(
-                $"The profile name '{profile}' already exists!",
-                "Invalid name",
+                string.Format(
+                    LanguageManager.GetLangOrDefault("ProfileAlreadyExists", "The profile name '{0}' already exists!"),
+                    profile
+                ),
+                LanguageManager.GetLangOrDefault("ProfileInvalidNameTitle", "Invalid name"),
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error
             );
@@ -77,8 +85,11 @@ public partial class ProfileSelectionDialog : UIWindowBase
         if (reservedNames.Any(n => n.Equals(profile, StringComparison.InvariantCultureIgnoreCase)))
         {
             MessageBox.Show(
-                $"The name '{profile}' is reserved and cannot be used!",
-                "Reserved name",
+                string.Format(
+                    LanguageManager.GetLangOrDefault("ProfileNameReserved", "The name '{0}' is reserved and cannot be used!"),
+                    profile
+                ),
+                LanguageManager.GetLangOrDefault("ProfileReservedNameTitle", "Reserved name"),
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error
             );
@@ -115,8 +126,8 @@ public partial class ProfileSelectionDialog : UIWindowBase
         if (selectedProfile == "Default") //Default
         {
             MessageBox.Show(
-                "You can not delete the default profile!",
-                "Default profile",
+                LanguageManager.GetLangOrDefault("ProfileDeleteDefault", "You can not delete the default profile!"),
+                LanguageManager.GetLangOrDefault("ProfileDeleteDefaultTitle", "Default profile"),
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error
             );
@@ -127,8 +138,8 @@ public partial class ProfileSelectionDialog : UIWindowBase
         if (ProfileManager.SelectedProfile == (string)comboProfiles.SelectedItem) //Active profile?
         {
             MessageBox.Show(
-                "You can not delete the active profile!",
-                "Profile active",
+                LanguageManager.GetLangOrDefault("ProfileDeleteActive", "You can not delete the active profile!"),
+                LanguageManager.GetLangOrDefault("ProfileDeleteActiveTitle", "Profile active"),
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error
             );
@@ -138,8 +149,14 @@ public partial class ProfileSelectionDialog : UIWindowBase
 
         if (
             MessageBox.Show(
-                $"Do you want to delete the profile {comboProfiles.SelectedItem} from the list?\nThis will not delete the user data.",
-                "Delete profile?",
+                string.Format(
+                    LanguageManager.GetLangOrDefault(
+                        "ProfileDeleteConfirm",
+                        "Do you want to delete the profile {0} from the list?\nThis will not delete the user data."
+                    ),
+                    comboProfiles.SelectedItem
+                ),
+                LanguageManager.GetLangOrDefault("ProfileDeleteConfirmTitle", "Delete profile?"),
                 MessageBoxButtons.OKCancel,
                 MessageBoxIcon.Question
             ) != DialogResult.OK

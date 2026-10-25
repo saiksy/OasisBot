@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 using RSBot.Core;
+using RSBot.Core.Components;
 using RSBot.Core.Event;
 using SDUI.Controls;
 
@@ -34,8 +35,8 @@ public partial class QuestSidebarElement : DoubleBufferedControl
         if (TrackedQuests.Count >= 4 && !TrackedQuests.Contains(questId))
         {
             MessageBox.Show(
-                "You can only track a maximum of 4 quests at a time",
-                "Track quest",
+                LanguageManager.GetLangOrDefault("TrackQuestLimit", "You can only track a maximum of 4 quests at a time"),
+                LanguageManager.GetLangOrDefault("TrackQuestTitle", "Track quest"),
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information
             );

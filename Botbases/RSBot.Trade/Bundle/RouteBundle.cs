@@ -309,10 +309,14 @@ internal class RouteBundle
     {
         _blockedByRouteDialog = true;
 
+        var selectRouteTitle = LanguageManager.GetLangOrDefault("SelectRouteTitle", "Select route");
         var inputDialog = new InputDialog(
-            "Select route",
-            "Select route",
-            "Select the route to start from at the current location.",
+            selectRouteTitle,
+            selectRouteTitle,
+            LanguageManager.GetLangOrDefault(
+                "SelectRouteContent",
+                "Select the route to start from at the current location."
+            ),
             InputDialog.InputType.Combobox
         )
         {

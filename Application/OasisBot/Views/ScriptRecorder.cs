@@ -359,8 +359,8 @@ public partial class ScriptRecorder : UIWindow
     {
         if (
             MessageBox.Show(
-                @"Do you really want to clear the script?",
-                @"Are you sure?",
+                LanguageManager.GetLangOrDefault("ClearScriptConfirm", "Do you really want to clear the script?"),
+                LanguageManager.GetLangOrDefault("AreYouSureTitle", "Are you sure?"),
                 MessageBoxButtons.YesNoCancel,
                 MessageBoxIcon.Question
             ) != DialogResult.Yes

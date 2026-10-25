@@ -78,8 +78,14 @@ public partial class Updater : UIWindow
         catch (Exception ex)
         {
             MessageBox.Show(
-                $"Failed to launch installer: {ex.Message}\n\nNote: If you are testing with the mock updater, the downloaded file is a dummy and cannot be executed.",
-                "Update Error",
+                string.Format(
+                    LanguageManager.GetLangOrDefault(
+                        "UpdaterLaunchFailed",
+                        "Failed to launch installer: {0}\n\nNote: If you are testing with the mock updater, the downloaded file is a dummy and cannot be executed."
+                    ),
+                    ex.Message
+                ),
+                LanguageManager.GetLangOrDefault("UpdateErrorTitle", "Update Error"),
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error
             );
@@ -99,7 +105,7 @@ public partial class Updater : UIWindow
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(ex.Message, LanguageManager.GetLangOrDefault("MsgBoxErrorTitle", "Error!"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             Environment.Exit(0);
         }
     }
@@ -122,7 +128,7 @@ public partial class Updater : UIWindow
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(ex.Message, LanguageManager.GetLangOrDefault("MsgBoxErrorTitle", "Error!"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             Environment.Exit(0);
         }
     }

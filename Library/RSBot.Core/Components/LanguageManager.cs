@@ -179,6 +179,18 @@ public class LanguageManager
     }
 
     /// <summary>
+    ///     Get language value for the calling module
+    /// </summary>
+    /// <param name="key">The key</param>
+    /// <param name="defaultText">The value that will be returned if the translation could not be found</param>
+    public static string GetLangOrDefault(string key, string defaultText)
+    {
+        var value = GetLang(key);
+
+        return string.IsNullOrEmpty(value) ? defaultText : value;
+    }
+
+    /// <summary>
     ///     Translate the control
     /// </summary>
     /// <param name="view">The control view</param>

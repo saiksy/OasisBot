@@ -24,7 +24,7 @@ public partial class TrainingAreasDialog : UIWindowBase
     {
         if (listView.SelectedIndices.Count <= 0)
         {
-            MessageBox.Show("Please select a training area!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(LanguageManager.GetLangOrDefault("SelectTrainingArea", "Please select a training area!"), LanguageManager.GetLangOrDefault("MsgBoxWarningTitle", "Warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
             DialogResult = DialogResult.Retry;
             return;
         }

@@ -58,7 +58,7 @@ internal static class RuSroAuthService
 
         if (selectedAccount == null)
         {
-            MessageBox.Show("No account selected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(LanguageManager.GetLangOrDefault("NoAccountSelected", "No account selected"), LanguageManager.GetLangOrDefault("MsgBoxErrorTitle", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             return false;
         }
 
@@ -67,8 +67,8 @@ internal static class RuSroAuthService
         if (string.IsNullOrWhiteSpace(email))
         {
             MessageBox.Show(
-                "The selected account has no email address",
-                "Error",
+                LanguageManager.GetLangOrDefault("AccountNoEmail", "The selected account has no email address"),
+                LanguageManager.GetLangOrDefault("MsgBoxErrorTitle", "Error"),
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error
             );
@@ -88,7 +88,7 @@ internal static class RuSroAuthService
         catch (Exception ex)
         {
             Log.Error("[RuSroAuthService]: " + ex.Message);
-            MessageBox.Show(ex.Message, "4game authorization error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(ex.Message, LanguageManager.GetLangOrDefault("AuthErrorTitle", "4game authorization error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         return false;
@@ -198,8 +198,8 @@ internal static class RuSroAuthService
                 break;
 
             DialogResult resendResult = MessageBox.Show(
-                "The email code did not arrive? Request a new code?",
-                "4game authorization",
+                LanguageManager.GetLangOrDefault("ResendEmailCode", "The email code did not arrive? Request a new code?"),
+                LanguageManager.GetLangOrDefault("AuthTitle", "4game authorization"),
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question
             );

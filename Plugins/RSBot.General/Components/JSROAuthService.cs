@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using RSBot.Core;
+using RSBot.Core.Components;
 using RSBot.Core.Extensions;
 
 namespace RSBot.General.Components;
@@ -45,7 +46,7 @@ internal static class JSROAuthService
 
         if (selectedAccount == null)
         {
-            MessageBox.Show("No account selected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(LanguageManager.GetLangOrDefault("NoAccountSelected", "No account selected"), LanguageManager.GetLangOrDefault("MsgBoxErrorTitle", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             return false;
         }
 

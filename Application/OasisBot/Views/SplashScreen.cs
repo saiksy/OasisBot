@@ -188,8 +188,8 @@ public partial class SplashScreen : UIWindow
         if (!Kernel.PluginManager.LoadAssemblies())
         {
             MessageBox.Show(
-                @"Failed to load plugins. Process canceled!",
-                @"Initialize Application - Error",
+                LanguageManager.GetLangOrDefault("PluginLoadFailed", "Failed to load plugins. Process canceled!"),
+                LanguageManager.GetLangOrDefault("InitAppErrorTitle", "Initialize Application - Error"),
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error
             );
@@ -199,8 +199,8 @@ public partial class SplashScreen : UIWindow
         //---- Load Botbases ----
         if (!Kernel.BotbaseManager.LoadAssemblies())
             MessageBox.Show(
-                @"Failed to load botbases. Process canceled!",
-                @"Initialize Application - Error",
+                LanguageManager.GetLangOrDefault("BotbaseLoadFailed", "Failed to load botbases. Process canceled!"),
+                LanguageManager.GetLangOrDefault("InitAppErrorTitle", "Initialize Application - Error"),
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error
             );
@@ -218,8 +218,8 @@ public partial class SplashScreen : UIWindow
         if (!Game.InitializeArchiveFiles())
         {
             MessageBox.Show(
-                @"Failed to load game data. Boot process canceled!",
-                @"Initialize Application - Error",
+                LanguageManager.GetLangOrDefault("GameDataLoadFailed", "Failed to load game data. Boot process canceled!"),
+                LanguageManager.GetLangOrDefault("InitAppErrorTitle", "Initialize Application - Error"),
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error
             );

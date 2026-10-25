@@ -397,8 +397,8 @@ public partial class Main : DoubleBufferedControl
     private void linkAttackWeakerMobsHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
         MessageBox.Show(
-            "If the player is under attack by a monster that is set to be avoided the bot will counter attack weaker mobs that are currently attacking the player first before targeting the avoided monster again. The bot will only kill weaker monsters that are attacking the player and won't start to pull new mobs to the battle.",
-            "Attack weaker mobs first",
+            LanguageManager.GetLangOrDefault("AttackWeakerFirstHelp", "If the player is under attack by a monster that is set to be avoided the bot will counter attack weaker mobs that are currently attacking the player first before targeting the avoided monster again. The bot will only kill weaker monsters that are attacking the player and won't start to pull new mobs to the battle."),
+            LanguageManager.GetLangOrDefault("AttackWeakerFirstTitle", "Attack weaker mobs first"),
             MessageBoxButtons.OK,
             MessageBoxIcon.Question
         );

@@ -5,6 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Numerics;
 using System.Windows.Forms;
+using RSBot.Core.Components;
 using RSBot.Core.Extensions;
 using RSBot.NavMeshApi;
 using RSBot.NavMeshApi.Dungeon;
@@ -352,7 +353,7 @@ public partial class NavMeshRenderer : DoubleBufferedControl
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.ToString(), "Exception", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(this, ex.ToString(), LanguageManager.GetLangOrDefault("ExceptionTitle", "Exception"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 

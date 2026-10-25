@@ -34,8 +34,8 @@ public class TradeBase : IBotbase
         if (!AssertPlayerIsTrader())
         {
             MessageBox.Show(
-                "The active character can't trade goods! Make sure that you have the correct job and suite equiped.",
-                "Can't trade",
+                LanguageManager.GetLangOrDefault("CannotTrade", "The active character can't trade goods! Make sure that you have the correct job and suite equiped."),
+                LanguageManager.GetLangOrDefault("CannotTradeTitle", "Can't trade"),
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error
             );

@@ -157,8 +157,11 @@ public partial class Main : DoubleBufferedControl
 
         if (
             MessageBox.Show(
-                $"Do you realy want to delete the route list {comboRouteList.SelectedItem}?",
-                "Delete list",
+                string.Format(
+                    LanguageManager.GetLangOrDefault("DeleteRouteListConfirm", "Do you realy want to delete the route list {0}?"),
+                    comboRouteList.SelectedItem
+                ),
+                LanguageManager.GetLangOrDefault("DeleteListTitle", "Delete list"),
                 MessageBoxButtons.YesNo
             ) != DialogResult.Yes
         )
@@ -177,10 +180,11 @@ public partial class Main : DoubleBufferedControl
 
     private void buttonCreateList_Click(object sender, EventArgs e)
     {
+        var routeListTitle = LanguageManager.GetLangOrDefault("NewRouteListTitle", "New route list");
         var dialog = new InputDialog(
-            "New route list",
-            "New route list",
-            "Please enter the name for the new route list"
+            routeListTitle,
+            routeListTitle,
+            LanguageManager.GetLangOrDefault("NewRouteListContent", "Please enter the name for the new route list")
         );
         if (dialog.ShowDialog() != DialogResult.OK)
             return;
@@ -190,8 +194,8 @@ public partial class Main : DoubleBufferedControl
         if (userInput.Contains(';'))
         {
             MessageBox.Show(
-                "The character ';' is invalid in route list names",
-                "Invalid character",
+                LanguageManager.GetLangOrDefault("RouteNameSemicolon", "The character ';' is invalid in route list names"),
+                LanguageManager.GetLangOrDefault("InvalidCharacterTitle", "Invalid character"),
                 MessageBoxButtons.OK
             );
 
@@ -201,7 +205,7 @@ public partial class Main : DoubleBufferedControl
         //ToDO: Refactor the config handling completely to JSON so it's possible to have whitespaces and such in names -> Or create a key value pair
         if (userInput.Contains(' '))
         {
-            MessageBox.Show("The name can not have a whitespace character", "Invalid character", MessageBoxButtons.OK);
+            MessageBox.Show(LanguageManager.GetLangOrDefault("RouteNameWhitespace", "The name can not have a whitespace character"), LanguageManager.GetLangOrDefault("InvalidCharacterTitle", "Invalid character"), MessageBoxButtons.OK);
 
             return;
         }
@@ -209,7 +213,7 @@ public partial class Main : DoubleBufferedControl
         userInput = userInput.Trim();
         if (TradeConfig.RouteScriptList.Contains(userInput))
         {
-            MessageBox.Show("The name can not have a whitespace character", "Invalid character", MessageBoxButtons.OK);
+            MessageBox.Show(LanguageManager.GetLangOrDefault("RouteNameWhitespace", "The name can not have a whitespace character"), LanguageManager.GetLangOrDefault("InvalidCharacterTitle", "Invalid character"), MessageBoxButtons.OK);
 
             return;
         }
@@ -336,8 +340,8 @@ public partial class Main : DoubleBufferedControl
             EventManager.FireEvent("OnShowScriptRecorder", 2000, true);
         else
             MessageBox.Show(
-                "Can not record a new script while a script is running! Stop the bot and try again.",
-                "Script manager busy",
+                LanguageManager.GetLangOrDefault("ScriptManagerBusy", "Can not record a new script while a script is running! Stop the bot and try again."),
+                LanguageManager.GetLangOrDefault("ScriptManagerBusyTitle", "Script manager busy"),
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error
             );

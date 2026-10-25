@@ -169,8 +169,8 @@ public partial class Main : DoubleBufferedControl
             EventManager.FireEvent("OnShowScriptRecorder", ScriptRecorderOwnerId, true);
         else
             MessageBox.Show(
-                "Can not record a new script while a script is running! Stop the bot and try again.",
-                "Script manager busy",
+                LanguageManager.GetLangOrDefault("ScriptManagerBusy", "Can not record a new script while a script is running! Stop the bot and try again."),
+                LanguageManager.GetLangOrDefault("ScriptManagerBusyTitle", "Script manager busy"),
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error
             );

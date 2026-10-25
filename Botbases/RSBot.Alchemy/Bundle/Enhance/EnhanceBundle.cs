@@ -129,8 +129,8 @@ internal class EnhanceBundle : IAlchemyBundle
 
             Kernel.Bot.Stop();
             MessageBox.Show(
-                "No more lucky powder left in the inventory.",
-                "Lucky powder",
+                LanguageManager.GetLangOrDefault("NoLuckyPowder", "No more lucky powder left in the inventory."),
+                LanguageManager.GetLangOrDefault("LuckyPowderTitle", "Lucky powder"),
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information
             );

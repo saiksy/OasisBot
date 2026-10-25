@@ -33,3 +33,5 @@ RSBot.Alchemy.Main.Panel.Panel.MagicOptionsSettingsView.lvMagicOptions.Option="�
 RSBot.Alchemy.Main.Panel.Panel.MagicOptionsSettingsView.lvMagicOptions.Current="当前"
 RSBot.Alchemy.Main.Panel.Panel.MagicOptionsSettingsView.lvMagicOptions.Max="最大"
 RSBot.Alchemy.Main.Panel.Panel.MagicOptionsSettingsView.lvMagicOptions.Num. Stones="所需石头数"
+NoLuckyPowder="背包里没有幸运粉末了。"
+LuckyPowderTitle="幸运粉末"
