@@ -224,7 +224,7 @@ public class Game
     /// </summary>
     public static void Initialize()
     {
-        ClientType = GlobalConfig.GetEnum("RSBot.Game.ClientType", GameClientType.Vietnam);
+        ClientType = GlobalConfig.GetEnum("RSBot.Game.ClientType", GameClientType.Chinese);
         PacketCodepage = GlobalConfig.Get<int>("RSBot.Game.PacketCodepage");
         LegacyTextEncoding = ResolveLegacyTextEncoding();
         ReferenceManager = new ReferenceManager();

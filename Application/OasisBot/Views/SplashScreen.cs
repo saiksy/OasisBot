@@ -84,7 +84,7 @@ public partial class SplashScreen : UIWindow
                 clientTypeDialog.ShowInTaskbar = true;
                 clientTypeDialog.StartPosition = FormStartPosition.CenterScreen;
                 clientTypeDialog.Selector.Items.AddRange(Enum.GetNames(typeof(GameClientType)));
-                clientTypeDialog.Selector.SelectedIndex = 2;
+                clientTypeDialog.Selector.SelectedIndex = (int)GameClientType.Chinese;
                 clientTypeDialog.TopMost = true;
                 clientTypeDialog.StartPosition = FormStartPosition.CenterScreen;
 
@@ -96,7 +96,7 @@ public partial class SplashScreen : UIWindow
                 else
                 {
                     MessageBox.Show(LanguageManager.GetLang("ClientTypeNotSelected"));
-                    GlobalConfig.Set("RSBot.Game.ClientType", GameClientType.Vietnam);
+                    GlobalConfig.Set("RSBot.Game.ClientType", GameClientType.Chinese);
                 }
             }
             else
