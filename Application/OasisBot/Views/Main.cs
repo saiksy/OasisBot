@@ -435,7 +435,7 @@ public partial class Main : UIWindow
             dropdown.Tag = item.Key;
             languageToolStripMenuItem.DropDownItems.Add(dropdown);
 
-            if (Kernel.Language == dropdown.Text)
+            if (Kernel.Language == dropdown.Tag?.ToString())
                 dropdown.Checked = true;
         }
 

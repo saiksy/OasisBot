@@ -1,0 +1,8 @@
+DisplayName="背包"
+RSBot.Inventory.Main.Panel.buttonUseItem="使用"
+RSBot.Inventory.Main.Panel.label1="背包："
+RSBot.Inventory.Main.Panel.label2="空余格："
+RSBot.Inventory.UseItemDialog.label2="你可以按自己的判断使用该物品。\n会弹出一个条件窗口，可在其中设置使用条件。"
+RSBot.Inventory.UseItemDialog.label1="如果只想直接使用该物品，请点击此按钮。"
+RSBot.Inventory.UseItemDialog.buttonCancel="按条件使用"
+RSBot.Inventory.UseItemDialog.buttonOk="直接使用"

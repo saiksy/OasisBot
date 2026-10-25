@@ -1,0 +1,8 @@
+RSBot.CommandCenter.Main.TabControl.TabPage.label1="在游戏聊天窗口中输入这些命令"
+RSBot.CommandCenter.Main.TabControl.TabPage.label2="<即将推出>"
+RSBot.CommandCenter.Main.TabControl.tabPage1="表情命令"
+RSBot.CommandCenter.Main.TabControl.tabPage2="聊天命令"
+RSBot.CommandCenter.Main.TabControl.tabPage3="通知"
+RSBot.CommandCenter.Main.btnSave="保存"
+RSBot.CommandCenter.Main.btnResetToDefaults="恢复默认"
+RSBot.CommandCenter.Main.checkEnable="启用 Command Center"

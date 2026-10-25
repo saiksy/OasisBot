@@ -1,0 +1,6 @@
+DisplayName="地图"
+RSBot.Map.Main.label3="该功能在 Bot 运行期间无效。\n如果希望 Bot 在运行时自动攻击，请设置「回避」。"
+RSBot.Map.Main.checkBoxAutoSelectUniques="自动选中首领"
+RSBot.Map.Main.label4="显示："
+RSBot.Map.Main.lblRegion="未进入游戏"
+NoName="<无名称>"

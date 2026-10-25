@@ -1,0 +1,7 @@
+DisplayName="日志"
+RSBot.Log.Main.Panel.checkNormal="普通"
+RSBot.Log.Main.Panel.checkError="错误"
+RSBot.Log.Main.Panel.checkWarning="警告"
+RSBot.Log.Main.Panel.checkDebug="调试"
+RSBot.Log.Main.Panel.btnReset="清空"
+RSBot.Log.Main.Panel.checkEnabled="启用"
