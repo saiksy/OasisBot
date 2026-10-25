@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using RSBot.Core;
+using RSBot.Core.Components;
 using RSBot.Core.Event;
 using RSBot.Core.Objects;
 using RSBot.Training.Views.Dialogs;
@@ -440,11 +441,19 @@ public partial class Main : DoubleBufferedControl
         btnRefetchNavLink.Click += async (s, e) =>
         {
             btnRefetchNavLink.Enabled = false;
-            btnRefetchNavLink.Text = "Updating...";
+            btnRefetchNavLink.Text = LanguageManager.GetLangBySpecificKey(
+                "RSBot.Training",
+                "NavLinkUpdating",
+                "Updating..."
+            );
 
             await Bot.NavigationManager.FetchRemoteLinkageData();
 
-            btnRefetchNavLink.Text = "Update NavLink";
+            btnRefetchNavLink.Text = LanguageManager.GetLangBySpecificKey(
+                "RSBot.Training",
+                "NavLinkUpdate",
+                "Update NavLink"
+            );
             btnRefetchNavLink.Enabled = true;
         };
 

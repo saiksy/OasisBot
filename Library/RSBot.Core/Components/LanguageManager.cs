@@ -238,7 +238,63 @@ public class LanguageManager
                 if (!string.IsNullOrWhiteSpace(translatedText))
                     control.Text = translatedText;
 
+            TranslateColumns(values, control, headerEx);
+
             TranslateControls(values, control, headerEx);
+        }
+    }
+
+    /// <summary>
+    ///     Translate the column headers of list and grid controls.
+    ///     Columns are not controls, so they are keyed under the owning control.
+    ///     ListView column headers usually have no name, so the original header text
+    ///     is used as the key suffix and preserved in the column tag for language switches.
+    /// </summary>
+    private static void TranslateColumns(LangDict values, Control control, string headerEx)
+    {
+        switch (control)
+        {
+            case ListView listView:
+                foreach (ColumnHeader column in listView.Columns)
+                {
+                    if (column.Tag is not string originalText)
+                    {
+                        if (string.IsNullOrWhiteSpace(column.Text))
+                            continue;
+
+                        originalText = column.Text;
+                        column.Tag = originalText;
+                    }
+
+                    var columnKey = $"{headerEx}.{control.Name}.{originalText}";
+                    column.Text =
+                        values.TryGetValue(columnKey, out var translatedText) && !string.IsNullOrWhiteSpace(translatedText)
+                            ? translatedText
+                            : originalText;
+                }
+
+                break;
+
+            case DataGridView gridView:
+                foreach (DataGridViewColumn column in gridView.Columns)
+                {
+                    if (string.IsNullOrWhiteSpace(column.Name))
+                        continue;
+
+                    if (column.Tag is not string originalHeaderText)
+                    {
+                        originalHeaderText = column.HeaderText;
+                        column.Tag = originalHeaderText;
+                    }
+
+                    var columnKey = $"{headerEx}.{control.Name}.{column.Name}";
+                    column.HeaderText =
+                        values.TryGetValue(columnKey, out var translatedText) && !string.IsNullOrWhiteSpace(translatedText)
+                            ? translatedText
+                            : originalHeaderText;
+                }
+
+                break;
         }
     }
 

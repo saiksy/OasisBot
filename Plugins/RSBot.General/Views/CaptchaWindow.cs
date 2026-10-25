@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
+using RSBot.Core.Components;
 using RSBot.Core.Extensions;
 using RSBot.General.Components;
 using SDUI;
@@ -33,13 +34,18 @@ internal sealed class CaptchaWindow : UIWindowBase
     private Exception _initializationException;
     private int _isCompleting;
 
+    private static string Lang(string key, string @default)
+    {
+        return LanguageManager.GetLangBySpecificKey("RSBot.General", key, @default);
+    }
+
     private CaptchaWindow(Uri captchaUri, Uri returnUri, CookieContainer cookieContainer)
     {
         _captchaUri = captchaUri ?? throw new ArgumentNullException(nameof(captchaUri));
         _returnUri = returnUri ?? throw new ArgumentNullException(nameof(returnUri));
         _cookieContainer = cookieContainer ?? throw new ArgumentNullException(nameof(cookieContainer));
 
-        Text = "4game verification";
+        Text = Lang("CaptchaWindowTitle", "4game verification");
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
@@ -59,7 +65,7 @@ internal sealed class CaptchaWindow : UIWindowBase
             Dock = DockStyle.Fill,
             Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point),
             ForeColor = ColorScheme.ForeColor,
-            Text = "Complete the 4game verification in the window below.",
+            Text = Lang("CaptchaWindowHint", "Complete the 4game verification in the window below."),
             TextAlign = ContentAlignment.MiddleLeft,
         };
 
@@ -69,7 +75,7 @@ internal sealed class CaptchaWindow : UIWindowBase
             AutoEllipsis = true,
             Dock = DockStyle.Fill,
             ForeColor = ColorScheme.ForeColor,
-            Text = "Opening the verification page...",
+            Text = Lang("CaptchaStatusOpening", "Opening the verification page..."),
             TextAlign = ContentAlignment.MiddleLeft,
         };
 
@@ -86,7 +92,7 @@ internal sealed class CaptchaWindow : UIWindowBase
             DialogResult = DialogResult.Cancel,
             Margin = new Padding(8, 0, 0, 0),
             Size = new Size(110, 32),
-            Text = "Cancel",
+            Text = Lang("CaptchaCancel", "Cancel"),
         };
 
         _continueButton = new UIButton
@@ -95,7 +101,7 @@ internal sealed class CaptchaWindow : UIWindowBase
             Enabled = false,
             Margin = new Padding(8, 0, 0, 0),
             Size = new Size(110, 32),
-            Text = "Check",
+            Text = Lang("CaptchaCheck", "Check"),
         };
         _continueButton.Click += ContinueButton_Click;
 
@@ -225,7 +231,10 @@ internal sealed class CaptchaWindow : UIWindowBase
             ImportCookies();
 
             _continueButton.Enabled = true;
-            _statusLabel.Text = "Complete the verification. This window will close automatically when it succeeds.";
+            _statusLabel.Text = Lang(
+                "CaptchaStatusAutoClose",
+                "Complete the verification. This window will close automatically when it succeeds."
+            );
             _webView.CoreWebView2.Navigate(_captchaUri.AbsoluteUri);
         }
         catch (Exception ex)
@@ -315,7 +324,10 @@ internal sealed class CaptchaWindow : UIWindowBase
     {
         if (!e.IsSuccess)
         {
-            _statusLabel.Text = $"The verification page failed to load ({e.WebErrorStatus}).";
+            _statusLabel.Text = string.Format(
+                Lang("CaptchaPageLoadFailed", "The verification page failed to load ({0})."),
+                e.WebErrorStatus
+            );
             _continueButton.Enabled = true;
             return;
         }
@@ -327,13 +339,16 @@ internal sealed class CaptchaWindow : UIWindowBase
         }
 
         _continueButton.Enabled = true;
-        _statusLabel.Text = "Complete the verification. Click Check if the page does not continue automatically.";
+        _statusLabel.Text = Lang(
+            "CaptchaStatusManualCheck",
+            "Complete the verification. Click Check if the page does not continue automatically."
+        );
     }
 
     private void ContinueButton_Click(object sender, EventArgs e)
     {
         _continueButton.Enabled = false;
-        _statusLabel.Text = "Checking the verification result...";
+        _statusLabel.Text = Lang("CaptchaStatusChecking", "Checking the verification result...");
         _webView.CoreWebView2.Navigate(_returnUri.AbsoluteUri);
     }
 
@@ -345,7 +360,7 @@ internal sealed class CaptchaWindow : UIWindowBase
         try
         {
             _continueButton.Enabled = false;
-            _statusLabel.Text = "Saving the verification result...";
+            _statusLabel.Text = Lang("CaptchaStatusSaving", "Saving the verification result...");
 
             IReadOnlyList<CoreWebView2Cookie> cookies = await _webView.CoreWebView2.CookieManager.GetCookiesAsync(null);
             foreach (CoreWebView2Cookie cookie in cookies)
@@ -361,7 +376,7 @@ internal sealed class CaptchaWindow : UIWindowBase
         }
         catch (Exception ex)
         {
-            _statusLabel.Text = "Could not save the verification result: " + ex.Message;
+            _statusLabel.Text = Lang("CaptchaSaveFailedPrefix", "Could not save the verification result: ") + ex.Message;
             _continueButton.Enabled = true;
             Interlocked.Exchange(ref _isCompleting, 0);
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using RSBot.Core;
+using RSBot.Core.Components;
 using SDUI.Controls;
 
 namespace RSBot.Training.Views.Dialogs;
@@ -10,6 +11,8 @@ public partial class CreateTrainingAreaDialog : UIWindowBase
     public CreateTrainingAreaDialog()
     {
         InitializeComponent();
+
+        LanguageManager.Translate(this, Kernel.Language);
     }
 
     private void buttonAccept_Click(object sender, EventArgs e)

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using RSBot.Core;
+using RSBot.Core.Components;
 using RSBot.Core.Event;
 using RSBot.Core.Objects.Skill;
 using RSBot.Protection.Components.Player;
@@ -246,7 +247,11 @@ public partial class Main : DoubleBufferedControl
     {
         if (Game.Player.StatPoints < numIncInt.Value + numIncStr.Value)
         {
-            buttonRun.Text = "Run";
+            buttonRun.Text = LanguageManager.GetLangBySpecificKey(
+                "RSBot.Protection",
+                "RSBot.Protection.Main.GroupBox.buttonRun",
+                "Run"
+            );
 
             _statIncreaseRunning = false;
         }
@@ -256,7 +261,11 @@ public partial class Main : DoubleBufferedControl
     {
         if (_statIncreaseRunning)
         {
-            buttonRun.Text = "Run";
+            buttonRun.Text = LanguageManager.GetLangBySpecificKey(
+                "RSBot.Protection",
+                "RSBot.Protection.Main.GroupBox.buttonRun",
+                "Run"
+            );
 
             _statIncreaseRunning = false;
 
@@ -286,7 +295,7 @@ public partial class Main : DoubleBufferedControl
 
         _statIncreaseRunning = true;
 
-        buttonRun.Text = "Cancel";
+        buttonRun.Text = LanguageManager.GetLangBySpecificKey("RSBot.Protection", "StatPointsCancel", "Cancel");
     }
 
     /// <summary>

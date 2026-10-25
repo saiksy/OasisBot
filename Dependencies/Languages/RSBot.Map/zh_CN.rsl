@@ -11,3 +11,7 @@ RSBot.Map.Main.Panel.label3="机器人在运行时不生效。\r\n如需在运�
 RSBot.Map.Main.Panel.checkBoxAutoSelectUniques="自动选择精英"
 RSBot.Map.Main.Panel.Panel.label4="显示："
 RSBot.Map.Main.TabControl.TabPage.Panel.btnNvmResetToPlayer="回到角色位置"
+RSBot.Map.Main.Panel.lvMonster.Name="名称"
+RSBot.Map.Main.Panel.lvMonster.Type="类型"
+RSBot.Map.Main.Panel.lvMonster.Level="等级"
+RSBot.Map.Main.Panel.lvMonster.Position="位置"

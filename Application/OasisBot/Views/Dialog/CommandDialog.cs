@@ -28,7 +28,10 @@ public partial class CommandDialog : UIWindowBase
         _command = command;
         Arguments = new Dictionary<string, string>(command.Arguments.Count);
         InitializeComponent();
-        Text = $"Add command: {command.Name}";
+        Text = string.Format(
+            LanguageManager.GetLangBySpecificKey("OasisBot", "AddCommandTitle", "Add command: {0}"),
+            command.Name
+        );
 
         foreach (var arg in command.Arguments)
         {

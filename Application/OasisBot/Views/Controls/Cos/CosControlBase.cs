@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using RSBot.Core.Components;
 using SDUI.Controls;
 using Label = SDUI.Controls.Label;
 using ProgressBar = SDUI.Controls.ProgressBar;
@@ -58,7 +59,7 @@ public class CosControlBase : DoubleBufferedControl
         label1.Name = "label1";
         label1.Size = new Size(31, 20);
         label1.TabIndex = 20;
-        label1.Text = "HP:";
+        label1.Text = LanguageManager.GetLangBySpecificKey("OasisBot", "HpLabel", "HP:");
         //
         // lblPetName
         //
@@ -73,7 +74,7 @@ public class CosControlBase : DoubleBufferedControl
         lblPetName.Name = "lblPetName";
         lblPetName.Size = new Size(103, 20);
         lblPetName.TabIndex = 19;
-        lblPetName.Text = "No pet found";
+        lblPetName.Text = LanguageManager.GetLangBySpecificKey("OasisBot", "NoPetFound", "No pet found");
         //
         // progressHP
         //

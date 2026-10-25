@@ -231,7 +231,10 @@ public partial class SplashScreen : UIWindow
 
     private void referenceDataLoader_ProgressChanged(object sender, ProgressChangedEventArgs e)
     {
-        lblLoading.Text = $"Loading: {e.UserState}";
+        lblLoading.Text = string.Format(
+            LanguageManager.GetLangBySpecificKey("OasisBot", "LoadingStatus", "Loading: {0}"),
+            e.UserState
+        );
         progressLoading.Value = e.ProgressPercentage;
     }
 }
