@@ -10,9 +10,9 @@ using RSBot.Core.Components;
 using RSBot.Core.Event;
 using RSBot.Core.Extensions;
 using RSBot.Core.Network;
+using RSBot.Core.Network.Hooks.Agent.Character;
 using RSBot.Core.Objects;
 using RSBot.Core.Objects.Inventory;
-using RSBot.Inventory.Subscriber;
 using SDUI;
 using SDUI.Controls;
 using Button = SDUI.Controls.Button;
@@ -33,7 +33,10 @@ public partial class Main : DoubleBufferedControl
     /// </summary>
     private int _selectedIndex;
 
-    private readonly ToolStripMenuItem _autoEquipWeaponToolStripMenuItem = new();
+    private readonly ToolStripMenuItem _weaponPreviewMenu = new();
+    private readonly ToolStripMenuItem _weaponPreviewEnabledMenu = new();
+    private readonly ToolStripMenuItem _weaponPreviewCurrentMenu = new();
+    private readonly ToolStripMenuItem _weaponPreviewCustomMenu = new();
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="Main" /> class.
@@ -43,9 +46,15 @@ public partial class Main : DoubleBufferedControl
         InitializeComponent();
         SubscribeEvents();
 
-        _autoEquipWeaponToolStripMenuItem.Click += AutoEquipWeaponToolStripMenuItem_Click;
+        _weaponPreviewEnabledMenu.Click += WeaponPreviewEnabledMenu_Click;
+        _weaponPreviewCurrentMenu.Click += WeaponPreviewCurrentMenu_Click;
+        _weaponPreviewCustomMenu.Click += WeaponPreviewCustomMenu_Click;
+
+        _weaponPreviewMenu.DropDownItems.Add(_weaponPreviewEnabledMenu);
+        _weaponPreviewMenu.DropDownItems.Add(_weaponPreviewCurrentMenu);
+        _weaponPreviewMenu.DropDownItems.Add(_weaponPreviewCustomMenu);
         contextMenuStrip.Items.Add(new ToolStripSeparator());
-        contextMenuStrip.Items.Add(_autoEquipWeaponToolStripMenuItem);
+        contextMenuStrip.Items.Add(_weaponPreviewMenu);
 
         listViewMain.SmallImageList = ListViewExtensions.StaticItemsImageList;
 
@@ -429,27 +438,130 @@ public partial class Main : DoubleBufferedControl
         inventoryItem?.Drop(cos, Game.Player.AbilityPet?.UniqueId);
     }
 
-    private void AutoEquipWeaponToolStripMenuItem_Click(object sender, EventArgs e)
+    private void WeaponPreviewEnabledMenu_Click(object sender, EventArgs e)
     {
-        if (listViewMain.SelectedItems.Count != 1 || listViewMain.SelectedItems[0].Tag is not InventoryItem inventoryItem)
+        var enabled = !WeaponAppearanceOverride.Enabled;
+
+        GlobalConfig.Set(WeaponAppearanceOverride.EnabledConfigKey, enabled);
+        GlobalConfig.Save();
+
+        if (enabled)
+            Log.Notify(
+                string.Format(
+                    LanguageManager.GetLangBySpecificKey(
+                        "RSBot.Inventory",
+                        "WeaponPreviewEnabledInfo",
+                        "Local weapon appearance enabled: {0}. Takes effect on the next character load."
+                    ),
+                    WeaponAppearanceOverride.TargetCodeName
+                )
+            );
+        else
+            Log.Notify(
+                LanguageManager.GetLangBySpecificKey(
+                    "RSBot.Inventory",
+                    "WeaponPreviewDisabledInfo",
+                    "Local weapon appearance disabled. Re-equip a weapon or re-enter the world to restore it."
+                )
+            );
+    }
+
+    private void WeaponPreviewCurrentMenu_Click(object sender, EventArgs e)
+    {
+        if (listViewMain.SelectedItems.Count != 1 || listViewMain.SelectedItems[0].Tag is not InventoryItem item)
             return;
 
-        if (!inventoryItem.Record.IsEquip || inventoryItem.Record.TypeID3 != 6)
+        if (item.Record == null)
             return;
 
-        var autoEquipWeapon = PlayerConfig.Get(AutoEquipWeaponSubscriber.ConfigKey, string.Empty);
-        var isConfigured = string.Equals(autoEquipWeapon, inventoryItem.Record.CodeName, StringComparison.OrdinalIgnoreCase);
+        SetWeaponPreview(item.Record.CodeName);
+    }
 
-        PlayerConfig.Set(
-            AutoEquipWeaponSubscriber.ConfigKey,
-            isConfigured ? string.Empty : inventoryItem.Record.CodeName
+    private void WeaponPreviewCustomMenu_Click(object sender, EventArgs e)
+    {
+        var title = LanguageManager.GetLangBySpecificKey("RSBot.Inventory", "WeaponPreviewTitle", "Local weapon appearance");
+
+        var dialog = new InputDialog(
+            title,
+            title,
+            LanguageManager.GetLangBySpecificKey(
+                "RSBot.Inventory",
+                "WeaponPreviewDialogMessage",
+                "Enter the weapon item code to display, for example ITEM_CH_SWORD_15_C_RARE."
+            ),
+            InputDialog.InputType.Textbox,
+            WeaponAppearanceOverride.TargetCodeName
         );
-        PlayerConfig.Save();
+
+        if (dialog.ShowDialog(this) != DialogResult.OK)
+            return;
+
+        SetWeaponPreview(dialog.Value?.ToString());
+    }
+
+    private void SetWeaponPreview(string codeName)
+    {
+        codeName = codeName?.Trim();
+        if (string.IsNullOrEmpty(codeName))
+            return;
+
+        if (Game.ReferenceManager?.GetRefItem(codeName) == null)
+        {
+            Log.Warn(
+                string.Format(
+                    LanguageManager.GetLangBySpecificKey(
+                        "RSBot.Inventory",
+                        "WeaponPreviewUnknownCode",
+                        "Unknown item code: {0}"
+                    ),
+                    codeName
+                )
+            );
+
+            return;
+        }
+
+        GlobalConfig.Set(WeaponAppearanceOverride.CodeNameConfigKey, codeName);
+        GlobalConfig.Set(WeaponAppearanceOverride.EnabledConfigKey, true);
+        GlobalConfig.Save();
+
+        Log.Notify(
+            string.Format(
+                LanguageManager.GetLangBySpecificKey(
+                    "RSBot.Inventory",
+                    "WeaponPreviewSetInfo",
+                    "Local weapon appearance set to {0}. Takes effect on the next character load."
+                ),
+                codeName
+            )
+        );
     }
 
     private void contextMenuStrip_Opening(object sender, CancelEventArgs e)
     {
-        _autoEquipWeaponToolStripMenuItem.Visible = false;
+        _weaponPreviewMenu.Text = LanguageManager.GetLangBySpecificKey(
+            "RSBot.Inventory",
+            "WeaponPreviewTitle",
+            "Local weapon appearance"
+        );
+        _weaponPreviewEnabledMenu.Text = LanguageManager.GetLangBySpecificKey(
+            "RSBot.Inventory",
+            "WeaponPreviewEnabled",
+            "Enable local weapon appearance"
+        );
+        _weaponPreviewEnabledMenu.Checked = WeaponAppearanceOverride.Enabled;
+        _weaponPreviewCurrentMenu.Text = LanguageManager.GetLangBySpecificKey(
+            "RSBot.Inventory",
+            "WeaponPreviewCurrent",
+            "Show this weapon instead"
+        );
+        _weaponPreviewCurrentMenu.Visible = false;
+        _weaponPreviewCurrentMenu.Enabled = false;
+        _weaponPreviewCustomMenu.Text = LanguageManager.GetLangBySpecificKey(
+            "RSBot.Inventory",
+            "WeaponPreviewCustom",
+            "Set weapon code..."
+        );
 
         if (listViewMain.SelectedIndices.Count != 1)
         {
@@ -469,6 +581,7 @@ public partial class Main : DoubleBufferedControl
             moveToPetToolStripMenuItem.Visible = false;
             moveToPlayerToolStripMenuItem.Visible = _selectedIndex == 3;
             selectMapLocationToolStripMenuItem.Visible = false;
+            _weaponPreviewMenu.Visible = false;
             return;
         }
 
@@ -492,22 +605,9 @@ public partial class Main : DoubleBufferedControl
             autoUseAccordingToPurposeToolStripMenuItem.Enabled = false;
         }
 
-        var isWeapon = inventoryItem.Record.IsEquip && inventoryItem.Record.TypeID3 == 6;
-        _autoEquipWeaponToolStripMenuItem.Visible = isWeapon;
-        if (isWeapon)
-        {
-            var autoEquipWeapon = PlayerConfig.Get(AutoEquipWeaponSubscriber.ConfigKey, string.Empty);
-            var isConfigured = string.Equals(
-                autoEquipWeapon,
-                inventoryItem.Record.CodeName,
-                StringComparison.OrdinalIgnoreCase
-            );
-
-            _autoEquipWeaponToolStripMenuItem.Checked = isConfigured;
-            _autoEquipWeaponToolStripMenuItem.Text = isConfigured
-                ? LanguageManager.GetLangOrDefault("AutoEquipWeaponClear", "Do not auto-equip on login")
-                : LanguageManager.GetLangOrDefault("AutoEquipWeaponSet", "Auto-equip on login");
-        }
+        _weaponPreviewMenu.Visible = true;
+        _weaponPreviewCurrentMenu.Visible = inventoryItem.Record != null && inventoryItem.Record.IsEquip && inventoryItem.Record.TypeID3 == 6;
+        _weaponPreviewCurrentMenu.Enabled = _weaponPreviewCurrentMenu.Visible;
 
         var isReverseScroll = inventoryItem.Equals(new TypeIdFilter(3, 3, 3, 3));
         useToolStripMenuItem.Visible = !isReverseScroll;

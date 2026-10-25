@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using RSBot.Core.Client.ReferenceObjects;
@@ -10,6 +11,13 @@ namespace RSBot.Core.Objects;
 
 public class InventoryItem
 {
+    /// <summary>
+    ///     Reports the slot and the absolute packet offset of an item id.
+    ///     Used by the client-side weapon appearance override to locate the
+    ///     weapon entry inside the chunked character data stream.
+    /// </summary>
+    internal static Action<byte, int> ItemIdOffsetCallback;
+
     private byte _optLevel;
 
     /// <summary>
@@ -296,6 +304,9 @@ public class InventoryItem
 
         if (Game.ClientType > GameClientType.Thailand)
             item.Rental = RentInfo.FromPacket(packet);
+
+        if (packet.Locked)
+            ItemIdOffsetCallback?.Invoke(item.Slot, packet.Length - packet.ReaderPosition);
 
         item.ItemId = packet.ReadUInt();
 
