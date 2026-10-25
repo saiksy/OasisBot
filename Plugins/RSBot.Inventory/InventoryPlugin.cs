@@ -16,6 +16,7 @@ namespace RSBot.Inventory
             BuyItemSubscriber.SubscribeEvents();
             InventoryUpdateSubscriber.SubscribeEvents();
             UseItemAtTrainplaceSubscriber.SubscribeEvents();
+            AutoEquipWeaponSubscriber.SubscribeEvents();
         }
 
         public void OnLoadCharacter() { }

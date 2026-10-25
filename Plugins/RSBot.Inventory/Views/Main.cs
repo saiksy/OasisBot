@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using RSBot.Core;
 using RSBot.Core.Client.ReferenceObjects;
+using RSBot.Core.Components;
 using RSBot.Core.Event;
 using RSBot.Core.Extensions;
 using RSBot.Core.Network;
 using RSBot.Core.Objects;
 using RSBot.Core.Objects.Inventory;
+using RSBot.Inventory.Subscriber;
 using SDUI;
 using SDUI.Controls;
 using Button = SDUI.Controls.Button;
@@ -31,6 +33,8 @@ public partial class Main : DoubleBufferedControl
     /// </summary>
     private int _selectedIndex;
 
+    private readonly ToolStripMenuItem _autoEquipWeaponToolStripMenuItem = new();
+
     /// <summary>
     ///     Initializes a new instance of the <see cref="Main" /> class.
     /// </summary>
@@ -38,6 +42,10 @@ public partial class Main : DoubleBufferedControl
     {
         InitializeComponent();
         SubscribeEvents();
+
+        _autoEquipWeaponToolStripMenuItem.Click += AutoEquipWeaponToolStripMenuItem_Click;
+        contextMenuStrip.Items.Add(new ToolStripSeparator());
+        contextMenuStrip.Items.Add(_autoEquipWeaponToolStripMenuItem);
 
         listViewMain.SmallImageList = ListViewExtensions.StaticItemsImageList;
 
@@ -421,8 +429,28 @@ public partial class Main : DoubleBufferedControl
         inventoryItem?.Drop(cos, Game.Player.AbilityPet?.UniqueId);
     }
 
+    private void AutoEquipWeaponToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        if (listViewMain.SelectedItems.Count != 1 || listViewMain.SelectedItems[0].Tag is not InventoryItem inventoryItem)
+            return;
+
+        if (!inventoryItem.Record.IsEquip || inventoryItem.Record.TypeID3 != 6)
+            return;
+
+        var autoEquipWeapon = PlayerConfig.Get(AutoEquipWeaponSubscriber.ConfigKey, string.Empty);
+        var isConfigured = string.Equals(autoEquipWeapon, inventoryItem.Record.CodeName, StringComparison.OrdinalIgnoreCase);
+
+        PlayerConfig.Set(
+            AutoEquipWeaponSubscriber.ConfigKey,
+            isConfigured ? string.Empty : inventoryItem.Record.CodeName
+        );
+        PlayerConfig.Save();
+    }
+
     private void contextMenuStrip_Opening(object sender, CancelEventArgs e)
     {
+        _autoEquipWeaponToolStripMenuItem.Visible = false;
+
         if (listViewMain.SelectedIndices.Count != 1)
         {
             e.Cancel = true;
@@ -462,6 +490,23 @@ public partial class Main : DoubleBufferedControl
 
             autoUseAccordingToPurposeToolStripMenuItem.Checked = false;
             autoUseAccordingToPurposeToolStripMenuItem.Enabled = false;
+        }
+
+        var isWeapon = inventoryItem.Record.IsEquip && inventoryItem.Record.TypeID3 == 6;
+        _autoEquipWeaponToolStripMenuItem.Visible = isWeapon;
+        if (isWeapon)
+        {
+            var autoEquipWeapon = PlayerConfig.Get(AutoEquipWeaponSubscriber.ConfigKey, string.Empty);
+            var isConfigured = string.Equals(
+                autoEquipWeapon,
+                inventoryItem.Record.CodeName,
+                StringComparison.OrdinalIgnoreCase
+            );
+
+            _autoEquipWeaponToolStripMenuItem.Checked = isConfigured;
+            _autoEquipWeaponToolStripMenuItem.Text = isConfigured
+                ? LanguageManager.GetLangOrDefault("AutoEquipWeaponClear", "Do not auto-equip on login")
+                : LanguageManager.GetLangOrDefault("AutoEquipWeaponSet", "Auto-equip on login");
         }
 
         var isReverseScroll = inventoryItem.Equals(new TypeIdFilter(3, 3, 3, 3));
