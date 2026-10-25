@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using RSBot.Core.Client;
 using RSBot.Core.Components;
 using RSBot.Core.Extensions;
@@ -132,6 +133,42 @@ public class Game
     public static int PacketCodepage { get; set; }
 
     /// <summary>
+    ///     Encoding of the client's non UTF-8 text resources (media.pk2 textdata files).
+    /// </summary>
+    public static Encoding LegacyTextEncoding { get; set; } = Encoding.Default;
+
+    private static readonly UTF8Encoding StrictUtf8 = new(false, true);
+
+    /// <summary>
+    ///     Opens a reader for a client text resource. Modern clients ship UTF-8 resources while classic
+    ///     ones (e.g. the Chinese client) use their locale code page, so the encoding is detected per file.
+    /// </summary>
+    /// <param name="stream">The resource stream.</param>
+    /// <returns>A reader using the detected encoding.</returns>
+    public static StreamReader CreateTextReader(Stream stream)
+    {
+        using var buffer = new MemoryStream();
+
+        stream.CopyTo(buffer);
+
+        var bytes = buffer.GetBuffer();
+        var length = (int)buffer.Length;
+
+        Encoding encoding;
+        try
+        {
+            StrictUtf8.GetCharCount(bytes, 0, length);
+            encoding = Encoding.UTF8;
+        }
+        catch (DecoderFallbackException)
+        {
+            encoding = LegacyTextEncoding;
+        }
+
+        return new StreamReader(new MemoryStream(bytes, 0, length, false), encoding);
+    }
+
+    /// <summary>
     ///     Starts the game.
     /// </summary>
     public static void Start()
@@ -189,6 +226,7 @@ public class Game
     {
         ClientType = GlobalConfig.GetEnum("RSBot.Game.ClientType", GameClientType.Vietnam);
         PacketCodepage = GlobalConfig.Get<int>("RSBot.Game.PacketCodepage");
+        LegacyTextEncoding = ResolveLegacyTextEncoding();
         ReferenceManager = new ReferenceManager();
         Party = new Party();
 
@@ -196,6 +234,37 @@ public class Game
         ShoppingManager.Initialize();
         ClientlessManager.Initialize();
         ScriptManager.Initialize();
+    }
+
+    /// <summary>
+    ///     Resolves the encoding of the client's non UTF-8 text resources.
+    ///     Can be forced with RSBot.Game.ResourceCodepage, otherwise it follows the client type.
+    /// </summary>
+    private static Encoding ResolveLegacyTextEncoding()
+    {
+        var codePage = GlobalConfig.Get<int>("RSBot.Game.ResourceCodepage");
+
+        if (codePage > 0)
+            return Encoding.GetEncoding(codePage);
+
+        switch (ClientType)
+        {
+            case GameClientType.Chinese_Old:
+            case GameClientType.Chinese:
+                return Encoding.GetEncoding(936); // GBK
+            case GameClientType.Taiwan_Old:
+            case GameClientType.Taiwan:
+                return Encoding.GetEncoding(950); // Big5
+            case GameClientType.Japanese_Old:
+            case GameClientType.Japanese:
+                return Encoding.GetEncoding(932);
+            case GameClientType.Korean:
+                return Encoding.GetEncoding(949);
+            case GameClientType.RuSro:
+                return Encoding.GetEncoding(1251);
+            default:
+                return Encoding.Default;
+        }
     }
 
     /// <summary>

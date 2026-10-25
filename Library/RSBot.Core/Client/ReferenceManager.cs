@@ -307,7 +307,7 @@ public class ReferenceManager
         where TReference : IReference<TKey>, new()
     {
         var filesToLoad = new List<string>();
-        using (var reader = new StreamReader(stream))
+        using (var reader = Game.CreateTextReader(stream))
         {
             while (!reader.EndOfStream)
             {
@@ -370,7 +370,7 @@ public class ReferenceManager
     {
         var filesToLoad = new List<string>(16);
 
-        using var reader = new StreamReader(stream);
+        using var reader = Game.CreateTextReader(stream);
         var builder = new StringBuilder(1024);
 
         while (!reader.EndOfStream)
@@ -394,7 +394,7 @@ public class ReferenceManager
     {
         var filesToLoad = new List<string>(16);
 
-        using var reader = new StreamReader(stream);
+        using var reader = Game.CreateTextReader(stream);
         var builder = new StringBuilder(1024);
 
         //Read list of files to load
@@ -418,7 +418,7 @@ public class ReferenceManager
     private void LoadReferenceFile<TReference>(Stream stream, IList<TReference> destination)
         where TReference : IReference, new()
     {
-        using var reader = new StreamReader(stream);
+        using var reader = Game.CreateTextReader(stream);
         var builder = new StringBuilder(1024);
 
         while (!reader.EndOfStream)
@@ -445,7 +445,7 @@ public class ReferenceManager
     private void LoadReferenceFile<TKey, TReference>(Stream stream, IDictionary<TKey, TReference> destination)
         where TReference : IReference<TKey>, new()
     {
-        using var reader = new StreamReader(stream);
+        using var reader = Game.CreateTextReader(stream);
         while (!reader.EndOfStream)
         {
             var line = reader.ReadLineByCRLF();

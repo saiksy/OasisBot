@@ -23,7 +23,7 @@ public class RegionInfoManager
         }
 
         using var stream = file.OpenRead().GetStream();
-        using var reader = new StreamReader(stream);
+        using var reader = Game.CreateTextReader(stream);
 
         //Older sro -> Uses groups
         if (Game.ClientType < GameClientType.Chinese_Old)

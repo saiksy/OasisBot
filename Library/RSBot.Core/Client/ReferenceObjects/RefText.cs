@@ -55,6 +55,11 @@ public class RefText : IReference<string>
             return false;
 
         var languageTab = 8;
+
+        // Chinese clients ship the simplified translations in column 6
+        if (Game.ClientType == GameClientType.Chinese_Old || Game.ClientType == GameClientType.Chinese)
+            languageTab = 6;
+
         if (Game.ClientType == GameClientType.RuSro)
             languageTab = 12;
 
