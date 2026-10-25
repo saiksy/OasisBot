@@ -126,6 +126,12 @@ public class Game
     public static GameClientType ClientType { get; set; }
 
     /// <summary>
+    ///     Overrides the code page used for length prefixed (single byte) packet strings.
+    ///     0 derives it from <see cref="ClientType" /> (Chinese uses GBK/936, Taiwan uses Big5/950).
+    /// </summary>
+    public static int PacketCodepage { get; set; }
+
+    /// <summary>
     ///     Starts the game.
     /// </summary>
     public static void Start()
@@ -182,6 +188,7 @@ public class Game
     public static void Initialize()
     {
         ClientType = GlobalConfig.GetEnum("RSBot.Game.ClientType", GameClientType.Vietnam);
+        PacketCodepage = GlobalConfig.Get<int>("RSBot.Game.PacketCodepage");
         ReferenceManager = new ReferenceManager();
         Party = new Party();
 

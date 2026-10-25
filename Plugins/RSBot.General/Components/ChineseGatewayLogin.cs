@@ -111,7 +111,7 @@ internal static class ChineseGatewayLogin
             return 0;
 
         uint crc = 0xFFFFFFFF;
-        var bytes = Encoding.GetEncoding(950).GetBytes(username);
+        var bytes = Encoding.GetEncoding(Packet.ResolveCodePage(936)).GetBytes(username);
 
         foreach (var value in bytes)
         {

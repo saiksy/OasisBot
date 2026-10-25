@@ -579,27 +579,45 @@ namespace RSBot.Core.Network
                 var length = _reader.ReadUInt16();
                 var bytes = _reader.ReadBytes(length);
 
-                if (Game.ClientType == GameClientType.RuSro)
-                    codepage = 1251;
-
-                if (Game.ClientType == GameClientType.Chinese || Game.ClientType == GameClientType.Taiwan)
-                    codepage = 950;
-
-                if (Game.ClientType == GameClientType.Korean)
-                    codepage = 949;
-
-                if (Game.ClientType == GameClientType.Japanese)
-                    codepage = 932;
-
-                if (
-                    Game.ClientType == GameClientType.Global
-                    || Game.ClientType == GameClientType.VTC_Game
-                    || Game.ClientType == GameClientType.Turkey
-                )
-                    codepage = 65001;
-
-                return Encoding.GetEncoding(codepage).GetString(bytes);
+                return Encoding.GetEncoding(ResolveCodePage(codepage)).GetString(bytes);
             }
+        }
+
+        /// <summary>
+        ///     Resolves the code page used for length prefixed (single byte) strings.
+        /// </summary>
+        /// <param name="codePage">The code page requested by the caller.</param>
+        /// <returns>The code page the current game client actually uses.</returns>
+        public static int ResolveCodePage(int codePage)
+        {
+            // Explicit override, see RSBot.Game.PacketCodepage
+            if (Game.PacketCodepage > 0)
+                return Game.PacketCodepage;
+
+            if (Game.ClientType == GameClientType.RuSro)
+                return 1251;
+
+            // Chinese -> mainland client (ICCGame etc.) which sends GBK, not Big5
+            if (Game.ClientType == GameClientType.Chinese)
+                return 936;
+
+            if (Game.ClientType == GameClientType.Taiwan)
+                return 950;
+
+            if (Game.ClientType == GameClientType.Korean)
+                return 949;
+
+            if (Game.ClientType == GameClientType.Japanese)
+                return 932;
+
+            if (
+                Game.ClientType == GameClientType.Global
+                || Game.ClientType == GameClientType.VTC_Game
+                || Game.ClientType == GameClientType.Turkey
+            )
+                return 65001;
+
+            return codePage;
         }
 
         /// <summary>
@@ -1131,26 +1149,7 @@ namespace RSBot.Core.Network
                 if (value == null)
                     value = string.Empty;
 
-                if (Game.ClientType == GameClientType.RuSro)
-                    codePage = 1251;
-
-                if (Game.ClientType == GameClientType.Chinese || Game.ClientType == GameClientType.Taiwan)
-                    codePage = 950;
-
-                if (Game.ClientType == GameClientType.Korean)
-                    codePage = 949;
-
-                if (Game.ClientType == GameClientType.Japanese)
-                    codePage = 932;
-
-                if (
-                    Game.ClientType == GameClientType.Global
-                    || Game.ClientType == GameClientType.VTC_Game
-                    || Game.ClientType == GameClientType.Turkey
-                )
-                    codePage = 65001;
-
-                var bytes = Encoding.GetEncoding(codePage).GetBytes(value);
+                var bytes = Encoding.GetEncoding(ResolveCodePage(codePage)).GetBytes(value);
                 _writer.Write((ushort)bytes.Length);
                 _writer.Write(bytes);
             }
