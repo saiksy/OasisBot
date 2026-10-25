@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using RSBot.Core;
 using RSBot.Core.Components;
 using SDUI;
 using SDUI.Controls;
@@ -17,6 +18,8 @@ public partial class ProfileSelectionDialog : UIWindowBase
         LoadProfiles();
         checkSaveSelection.Checked = !ProfileManager.ShowProfileDialog;
         BackColor = ColorScheme.BackColor;
+
+        LanguageManager.Translate(this, Kernel.Language);
     }
 
     /// <summary>

@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using RSBot.Core;
+using RSBot.Core.Components;
 using SDUI.Controls;
 
 namespace RSBot.Views;
@@ -43,6 +44,8 @@ public partial class Updater : UIWindow
     {
         InitializeComponent();
         CheckForIllegalCrossThreadCalls = false;
+
+        LanguageManager.Translate(this, Kernel.Language);
     }
 
     /// <summary>
@@ -109,7 +112,7 @@ public partial class Updater : UIWindow
             downloadProgress.Location = new Point(20, 45);
             cbChangeLog.Checked = false;
             centerPanel.Visible = false;
-            lblInfo.Text = "Downloading updates ...";
+            lblInfo.Text = LanguageManager.GetLangBySpecificKey("OasisBot", "DownloadingUpdates", "Downloading updates ...");
 
             var installerPath = Path.Combine(Kernel.BasePath, "RSBot-Setup-Latest.exe");
 

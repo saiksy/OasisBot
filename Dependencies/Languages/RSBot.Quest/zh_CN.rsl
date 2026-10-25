@@ -1,1 +1,6 @@
 RSBot.Quest.Main.checkShowCompleted="显示已完成"
+RSBot.Quest.QuestSidebarElement.lblTitle="任务日志"
+RSBot.Quest.QuestItem.Panel.lblObjective="任务目标 1（长标题示例）"
+RSBot.Quest.QuestItem.Panel.lblQuestName="任务日志 A"
+AllObjectivesCompleted="所有目标已完成"
+DisplayName="任务"

@@ -2,6 +2,7 @@
 using System.Linq;
 using RSBot.Core;
 using RSBot.Core.Client.ReferenceObjects;
+using RSBot.Core.Components;
 using RSBot.Core.Extensions;
 using RSBot.Core.Objects.Quests;
 using SDUI.Controls;
@@ -30,7 +31,11 @@ public partial class QuestItem : DoubleBufferedControl
 
         if (playerQuest.Objectives == null || playerQuest.Objectives.Length == 0)
         {
-            lblObjective.Text = "All objectives completed";
+            lblObjective.Text = LanguageManager.GetLangBySpecificKey(
+                "RSBot.Quest",
+                "AllObjectivesCompleted",
+                "All objectives completed"
+            );
 
             return;
         }

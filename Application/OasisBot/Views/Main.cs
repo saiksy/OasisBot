@@ -441,7 +441,9 @@ public partial class Main : UIWindow
 
         ConfigureSidebar();
         BackColor = ColorScheme.BackColor;
-        menuCurrentProfile.Text = "Profile: " + ProfileManager.SelectedProfile;
+        menuCurrentProfile.Text =
+            LanguageManager.GetLangBySpecificKey("OasisBot", "ProfilePrefix", "Profile: ")
+            + ProfileManager.SelectedProfile;
 
         EventManager.FireEvent("OnInitialized");
     }
@@ -486,6 +488,10 @@ public partial class Main : UIWindow
         }
 
         LanguageManager.Translate(this, Kernel.Language);
+
+        menuCurrentProfile.Text =
+            LanguageManager.GetLangBySpecificKey("OasisBot", "ProfilePrefix", "Profile: ")
+            + ProfileManager.SelectedProfile;
 
         dropdown.Checked = true;
 

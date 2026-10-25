@@ -49,6 +49,7 @@ public partial class SplashScreen : UIWindow
         Kernel.Language = GeneralConfig.Get("RSBot.Language", "en_US");
 
         LanguageManager.Translate(_mainForm, Kernel.Language);
+        LanguageManager.Translate(this, Kernel.Language);
 
         var updater = new Updater();
         if (await updater.Check())
